@@ -1,3 +1,8 @@
+"""
+Trying out RL fundamentals from scratch.
+Video: https://www.youtube.com/watch?v=psDlXfbe6ok
+"""
+
 import numpy as np
 from collections import namedtuple
 
@@ -30,6 +35,8 @@ class Agent():
         di = -1 if di > 0 else 1
         return Agent(self.i, self.j + di)    
 
+    def __repr__(self):
+        return f"Agent({self.i}, {self.j})"
 
 class Maze():
     """
@@ -43,7 +50,13 @@ class Maze():
         """
         Checks if the agent is within the bounds of the maze.
         """
-        return 0 <= i < self.env.shape[0] and 0 <= j < self.env.shape[1]
+        return 0 <= i < self.env.shape[0] and 0 <= j < self.env.shape[1] and self.env[i, j] != -1
+
+    def agent_in_bounds(self, a: Agent) -> bool:
+        """
+        Checks if the agent is within the bounds of the maze.
+        """
+        return self.in_bounds(a.i, a.j)
 
     def get_possible_actions(self) -> list:
         """
@@ -52,7 +65,7 @@ class Maze():
         """
         a = self.agent
         actions = [a.hmove(-1), a.hmove(1), a.vmove(-1), a.vmove(1)]
-        return [action for action in actions if self.in_bounds(action.i, action.j)]
+        return [action for action in actions if self.agent_in_bounds(action)]
 
     def visualize(self) -> None:
         """
